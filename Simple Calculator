@@ -1,0 +1,95 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class CalculatorGUI extends JFrame implements ActionListener {
+    JTextField input1, input2, resultField;
+    JButton addBtn, subBtn, mulBtn, divBtn, clearBtn;
+
+    public CalculatorGUI() {
+        // Set Frame
+        setTitle("Simple Calculator");
+        setSize(400, 250);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // center on screen
+        setLayout(new GridLayout(5, 2, 10, 10));
+
+        // Initialize components
+        input1 = new JTextField();
+        input2 = new JTextField();
+        resultField = new JTextField();
+        resultField.setEditable(false);  // result should not be editable
+
+        addBtn = new JButton("Add (+)");
+        subBtn = new JButton("Subtract (-)");
+        mulBtn = new JButton("Multiply (×)");
+        divBtn = new JButton("Divide (÷)");
+        clearBtn = new JButton("Clear");
+
+        // Add components to Frame
+        add(new JLabel("First Number:"));
+        add(input1);
+
+        add(new JLabel("Second Number:"));
+        add(input2);
+
+        add(addBtn);
+        add(subBtn);
+        add(mulBtn);
+        add(divBtn);
+
+        add(new JLabel("Result:"));
+        add(resultField);
+
+        // Add action listeners
+        addBtn.addActionListener(this);
+        subBtn.addActionListener(this);
+        mulBtn.addActionListener(this);
+        divBtn.addActionListener(this);
+        clearBtn.addActionListener(this);
+
+        // Add clear button at the bottom
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.add(clearBtn);
+        add(bottomPanel);
+
+        setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        try {
+            double num1 = Double.parseDouble(input1.getText());
+            double num2 = Double.parseDouble(input2.getText());
+            double result = 0;
+
+            if (e.getSource() == addBtn) {
+                result = num1 + num2;
+            } else if (e.getSource() == subBtn) {
+                result = num1 - num2;
+            } else if (e.getSource() == mulBtn) {
+                result = num1 * num2;
+            } else if (e.getSource() == divBtn) {
+                if (num2 == 0) {
+                    resultField.setText("Cannot divide by zero");
+                    return;
+                }
+                result = num1 / num2;
+            }
+            resultField.setText(String.valueOf(result));
+
+        } catch (NumberFormatException ex) {
+            resultField.setText("Invalid input");
+        }
+
+        if (e.getSource() == clearBtn) {
+            input1.setText("");
+            input2.setText("");
+            resultField.setText("");
+        }
+    }
+
+    public static void main(String[] args) {
+        new CalculatorGUI();
+    }
+}
